@@ -22,37 +22,6 @@ from simple_suction import Suction
 os.environ["SDL_VIDEODRIVER"] = "dummy"
 
 
-class Controller:
-    def __init__(self, cycle):
-        # robot param
-        self.__max_velocity = 0.22
-        self.__max_accel_to_velocity = 0.7
-        self.__max_velangular = 2.0
-        self.__max_accel_to_velangular = 3.0
-
-        self.__velocity = np.array([0.0, 0.0])
-        self.__velangular = 0.0
-        self.__cycle = cycle
-
-    def update(self, target_velocity, target_velangular):
-        # velocity
-        diff = target_velocity - self.__velocity
-        if np.linalg.norm(diff) > 0.0:
-            self.__velocity += min(np.linalg.norm(diff), self.__cycle * self.__max_accel_to_velocity) * diff / np.linalg.norm(diff)
-        if self.__max_velocity < np.linalg.norm(self.__velocity):
-            self.__velocity = np.linalg.norm(self.__max_velocity) * self.__velocity / np.linalg.norm(self.__velocity)
-        # velangular
-        cycle_acc = self.__cycle * self.__max_accel_to_velangular
-        self.__velangular = clamp(target_velangular, self.__velangular - cycle_acc, self.__velangular + cycle_acc)
-        self.__velangular = clamp(self.__velangular, -self.__max_velangular, self.__max_velangular)
-        return self.__velocity, self.__velangular
-    
-    def max_velocity(self):
-        return self.__max_velocity
-
-    def max_velangular(self):
-        return self.__max_velangular
-
 # pygame
 pygame.init()
 pygame.joystick.init()
