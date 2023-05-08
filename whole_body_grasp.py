@@ -138,6 +138,7 @@ class Arm(object):
                                                   wait_for_servers=0.0)
         self.group.set_max_acceleration_scaling_factor(1)
         self.group.set_max_velocity_scaling_factor(1)
+        # self.group.set_max_jerk_scaling_factor(0.1)
 
     def get_position(self, position):
         ps = geometry_msgs.msg.Pose()
